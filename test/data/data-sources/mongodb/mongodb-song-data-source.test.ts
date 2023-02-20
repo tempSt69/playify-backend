@@ -69,6 +69,18 @@ describe('MongoDB datasource', () => {
     });
   });
 
+  test('getOne fails', async () => {
+    const ds = new MongoDBSongDataSource(mockDatabase);
+    jest
+      .spyOn(mockDatabase, 'findOne')
+      .mockImplementation(() => Promise.resolve(undefined));
+    const result = await ds.getOne('63f37295e571cc2eb7d534fa');
+    expect(mockDatabase.findOne).toHaveBeenCalledWith(
+      new ObjectId('63f37295e571cc2eb7d534fa')
+    );
+    expect(result).toStrictEqual(undefined);
+  });
+
   test('find', async () => {
     const ds = new MongoDBSongDataSource(mockDatabase);
     jest.spyOn(mockDatabase, 'find').mockImplementation(() =>
