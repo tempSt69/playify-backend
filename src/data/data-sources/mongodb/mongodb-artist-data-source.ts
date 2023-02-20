@@ -1,9 +1,13 @@
+import { Db, ObjectId } from 'mongodb';
 import { Artist } from '../../../domain/entities/artist';
 import { ArtistDataSource } from '../../interfaces/data-sources/artist-data-source';
 import { DatabaseWrapper } from '../../interfaces/data-sources/database-wrapper';
+import MongoDBHandler from './mongodb';
 
 export class MongoDBArtistDataSource implements ArtistDataSource {
   private database: DatabaseWrapper;
+  static collection = 'artists';
+
   constructor(database: DatabaseWrapper) {
     this.database = database;
   }
@@ -27,4 +31,8 @@ export class MongoDBArtistDataSource implements ArtistDataSource {
       cover: item.cover,
     }));
   }
+}
+
+export function getArtistDatabase(db: Db): DatabaseWrapper {
+  return new MongoDBHandler(db, MongoDBArtistDataSource.collection);
 }

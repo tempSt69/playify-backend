@@ -1,10 +1,12 @@
 import { Song } from '../../../domain/entities/song';
 import { SongDataSource } from '../../interfaces/data-sources/song-data-source';
 import { DatabaseWrapper } from '../../interfaces/data-sources/database-wrapper';
-import { ObjectId } from 'mongodb';
+import { Db, ObjectId } from 'mongodb';
+import MongoDBHandler from './mongodb';
 
 export class MongoDBSongDataSource implements SongDataSource {
   private database: DatabaseWrapper;
+  static collection = 'songs';
   constructor(database: DatabaseWrapper) {
     this.database = database;
   }
@@ -21,7 +23,7 @@ export class MongoDBSongDataSource implements SongDataSource {
       duration: item.duration,
     };
   }
-  async find(song: Partial<Song>): Promise<Song[]> {
+  async find(song: Partial<Omit<Song, 'id'>>): Promise<Song[]> {
     const result = await this.database.find({ $or: { ...song } });
     return result.map((item) => ({
       id: item._id.toString(),
@@ -53,4 +55,7 @@ export class MongoDBSongDataSource implements SongDataSource {
       duration: item.duration,
     }));
   }
+}
+export function getSongDatabase(db: Db): DatabaseWrapper {
+  return new MongoDBHandler(db, MongoDBSongDataSource.collection);
 }
