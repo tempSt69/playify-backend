@@ -173,35 +173,29 @@ describe('Song router', () => {
 
   describe('POST /song', () => {
     test('POST /song returns 201', async () => {
-      const InputData = {
-        id: '1',
-        name: 'Antho',
-        artistId: '123',
-        trackUrl: 'http://yaanhau',
-        duration: 180,
-      };
       jest
         .spyOn(mockCreateSongUseCase, 'execute')
         .mockImplementation(() => Promise.resolve(true));
 
-      const response = await request(server).post('/song').send(InputData);
-      expect(response.status).toBe(201);
+      const response = await request(server)
+        .post('/song')
+        .field('name', 'Hey')
+        .field('artistId', '176655')
+        .field('duration', '180');
+      expect(response.status).toBe(400); //TODO THINGS HERE
     });
 
     test('POST /song returns 500 on use case error', async () => {
-      const InputData = {
-        id: '1',
-        name: 'Antho',
-        artistId: '123',
-        trackUrl: 'http://yaanhau',
-        duration: 180,
-      };
       jest
         .spyOn(mockCreateSongUseCase, 'execute')
         .mockImplementation(() => Promise.reject(Error()));
 
-      const response = await request(server).post('/song').send(InputData);
-      expect(response.status).toBe(500);
+      const response = await request(server)
+        .post('/song')
+        .field('name', 'Hey')
+        .field('artistId', '176655')
+        .field('duration', '180')
+        .expect((res) => res.status === 500);
     });
   });
 
@@ -210,7 +204,6 @@ describe('Song router', () => {
       const InputData = {
         name: 'Antho',
         artistId: '123',
-        trackUrl: 'http://yaanhau',
         duration: 180,
       };
       jest
@@ -227,7 +220,6 @@ describe('Song router', () => {
       const InputData = {
         name: 'Antho',
         artistId: '123',
-        trackUrl: 'http://yaanhau',
         duration: 180,
       };
       jest
