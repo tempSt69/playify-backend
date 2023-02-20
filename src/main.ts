@@ -3,11 +3,11 @@ import { MongoClient, ObjectId } from 'mongodb';
 import { MongoDBArtistDataSource } from './data/data-sources/mongodb/mongodb-artist-data-source';
 import { DatabaseWrapper } from './data/interfaces/data-sources/database-wrapper';
 import { ArtistRepositoryImpl } from './domain/repositories/artist-repository';
-import { CreateArtist } from './domain/use-cases/create-artist';
-import { GetAllArtists } from './domain/use-cases/get-all-artist';
+import { CreateArtist } from './domain/use-cases/artist/create-artist';
+import { GetAllArtists } from './domain/use-cases/artist/get-all-artist';
 import ArtistRouter from './presentation/routers/artist-router';
-import { UpdateArtist } from './domain/use-cases/update-artist';
-import { DeleteArtist } from './domain/use-cases/delete-artist';
+import { UpdateArtist } from './domain/use-cases/artist/update-artist';
+import { DeleteArtist } from './domain/use-cases/artist/delete-artist';
 
 async function getMongoDS() {
   const uri =
