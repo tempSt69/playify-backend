@@ -43,46 +43,46 @@ describe('Artist repository', () => {
       const result = await artistRepository.getArtists();
       expect(result).toStrictEqual(expectedData);
     });
+  });
 
-    describe('createArtist', () => {
-      test('should return true', async () => {
-        const inputData = {
-          id: '1',
-          name: 'Smith',
-          cover: 'John',
-        };
-        jest
-          .spyOn(mockArtistDataSource, 'create')
-          .mockImplementation(() => Promise.resolve(true));
+  describe('createArtist', () => {
+    test('should return true', async () => {
+      const inputData = {
+        id: '1',
+        name: 'Smith',
+        cover: 'John',
+      };
+      jest
+        .spyOn(mockArtistDataSource, 'create')
+        .mockImplementation(() => Promise.resolve(true));
 
-        const result = await artistRepository.createArtist(inputData);
-        expect(result).toBe(true);
-      });
+      const result = await artistRepository.createArtist(inputData);
+      expect(result).toBe(true);
+    });
+  });
+
+  describe('updateArtist', () => {
+    test('should return true', async () => {
+      const inputData = {
+        name: 'Smith',
+        cover: 'John',
+      };
+      jest
+        .spyOn(mockArtistDataSource, 'updateOne')
+        .mockImplementation(() => Promise.resolve(true));
+
+      const result = await artistRepository.updateArtist('1', inputData);
+      expect(result).toBe(true);
     });
 
-    describe('updateArtist', () => {
+    describe('delete artist', () => {
       test('should return true', async () => {
-        const inputData = {
-          name: 'Smith',
-          cover: 'John',
-        };
         jest
-          .spyOn(mockArtistDataSource, 'updateOne')
+          .spyOn(mockArtistDataSource, 'deleteOne')
           .mockImplementation(() => Promise.resolve(true));
 
-        const result = await artistRepository.updateArtist('1', inputData);
+        const result = await artistRepository.deleteArtist('1');
         expect(result).toBe(true);
-      });
-
-      describe('delete artist', () => {
-        test('should return true', async () => {
-          jest
-            .spyOn(mockArtistDataSource, 'deleteOne')
-            .mockImplementation(() => Promise.resolve(true));
-
-          const result = await artistRepository.deleteArtist('1');
-          expect(result).toBe(true);
-        });
       });
     });
   });

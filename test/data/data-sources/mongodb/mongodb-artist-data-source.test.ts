@@ -10,6 +10,7 @@ describe('MongoDB datasource', () => {
       insertOne: jest.fn(),
       deleteOne: jest.fn(),
       updateOne: jest.fn(),
+      findOne: jest.fn(),
     };
   });
 
