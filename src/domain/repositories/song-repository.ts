@@ -14,7 +14,7 @@ export class SongRepositoryImpl implements SongRepository {
     return result;
   }
 
-  async getOneSong(id: string): Promise<Song> {
+  async getOneSong(id: string): Promise<Song | undefined> {
     const result = await this.songDataSource.getOne(id);
     return result;
   }

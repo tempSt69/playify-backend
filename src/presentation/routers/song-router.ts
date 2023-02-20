@@ -13,6 +13,8 @@ import {
   updateSongSchema,
 } from '../../schemas/song-schema';
 import validate from '../../schemas/validate';
+import upload from '../upload/multer';
+import { Song } from '../../domain/entities/song';
 
 export default function SongRouter(
   getAllSongsUseCase: GetAllSongUseCase,
@@ -51,7 +53,7 @@ export default function SongRouter(
     validate(findSongSchema),
     async (req: Request, res: Response) => {
       try {
-        const fields = {
+        const fields: Partial<Omit<Song, 'id'>> = {
           name: req.params.searchString,
           artistId: req.params.searchString,
         };
@@ -65,13 +67,23 @@ export default function SongRouter(
 
   router.post(
     '/',
-    validate(createSongSchema),
+    upload.single('song'),
     async (req: Request, res: Response) => {
       try {
-        await createSongUseCase.execute(req.body);
+        if (!req.file?.filename) {
+          res.status(400).send('File not uploaded');
+          return;
+        }
+        const song = {
+          ...req.body,
+          trackUrl: req.file.filename,
+        };
+        await createSongUseCase.execute(song);
         res.statusCode = 201;
         res.send({ message: 'Created' });
       } catch (err: any) {
+        console.log(err.message, 'error');
+
         res.status(500).send({ message: 'Error saving data' });
       }
     }

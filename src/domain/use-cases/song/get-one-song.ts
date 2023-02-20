@@ -8,7 +8,7 @@ export class GetOneSong implements GetOneSongUseCase {
     this.songRepository = songRepository;
   }
 
-  async execute(id: string): Promise<Song> {
+  async execute(id: string): Promise<Song | undefined> {
     const result = await this.songRepository.getOneSong(id);
     return result;
   }

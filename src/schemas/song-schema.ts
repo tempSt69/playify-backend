@@ -7,11 +7,6 @@ export const createSongSchema = z.object({
         required_error: 'Name is required',
       })
       .min(1),
-    trackUrl: z
-      .string({
-        required_error: 'TrackUrl is required',
-      })
-      .min(10),
     artistId: z
       .string({
         required_error: 'ArtistId is required',
