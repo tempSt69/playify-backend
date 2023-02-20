@@ -1,6 +1,6 @@
-import { Artist } from '../entities/artist';
-import { ArtistRepository } from '../interfaces/repositories/artist-repository';
-import { GetAllArtistUseCase } from '../interfaces/use-cases/artist/get-all-artist';
+import { Artist } from '../../entities/artist';
+import { ArtistRepository } from '../../interfaces/repositories/artist-repository';
+import { GetAllArtistUseCase } from '../../interfaces/use-cases/artist/get-all-artist';
 
 export class GetAllArtists implements GetAllArtistUseCase {
   artistRepository: ArtistRepository;

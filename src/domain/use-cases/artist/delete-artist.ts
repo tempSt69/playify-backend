@@ -1,5 +1,5 @@
-import { ArtistRepository } from '../interfaces/repositories/artist-repository';
-import { DeleteArtistUseCase } from '../interfaces/use-cases/artist/delete-artist';
+import { ArtistRepository } from '../../interfaces/repositories/artist-repository';
+import { DeleteArtistUseCase } from '../../interfaces/use-cases/artist/delete-artist';
 
 export class DeleteArtist implements DeleteArtistUseCase {
   artistRepository: ArtistRepository;

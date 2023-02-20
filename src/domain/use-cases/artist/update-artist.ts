@@ -1,6 +1,6 @@
-import { Artist } from '../entities/artist';
-import { ArtistRepository } from '../interfaces/repositories/artist-repository';
-import { UpdateArtistUseCase } from '../interfaces/use-cases/artist/update-artist';
+import { Artist } from '../../entities/artist';
+import { ArtistRepository } from '../../interfaces/repositories/artist-repository';
+import { UpdateArtistUseCase } from '../../interfaces/use-cases/artist/update-artist';
 
 export class UpdateArtist implements UpdateArtistUseCase {
   artistRepository: ArtistRepository;
