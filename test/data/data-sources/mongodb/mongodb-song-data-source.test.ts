@@ -1,5 +1,6 @@
 import { DatabaseWrapper } from '../../../../src/data/interfaces/data-sources/database-wrapper';
 import { MongoDBSongDataSource } from '../../../../src/data/data-sources/mongodb/mongodb-song-data-source';
+import { ObjectId } from 'mongodb';
 
 describe('MongoDB datasource', () => {
   let mockDatabase: DatabaseWrapper;
@@ -33,6 +34,58 @@ describe('MongoDB datasource', () => {
     );
     const result = await ds.getAll();
     expect(mockDatabase.find).toHaveBeenCalledWith({});
+    expect(result).toStrictEqual([
+      {
+        id: '123',
+        name: 'Antho',
+        artistId: '123',
+        trackUrl: 'http://yaanhau',
+        duration: 180,
+      },
+    ]);
+  });
+
+  test('getOne', async () => {
+    const ds = new MongoDBSongDataSource(mockDatabase);
+    jest.spyOn(mockDatabase, 'findOne').mockImplementation(() =>
+      Promise.resolve({
+        _id: '63f37295e571cc2eb7d534fc',
+        name: 'Antho',
+        artistId: '123',
+        trackUrl: 'http://yaanhau',
+        duration: 180,
+      })
+    );
+    const result = await ds.getOne('63f37295e571cc2eb7d534fc');
+    expect(mockDatabase.findOne).toHaveBeenCalledWith(
+      new ObjectId('63f37295e571cc2eb7d534fc')
+    );
+    expect(result).toStrictEqual({
+      id: '63f37295e571cc2eb7d534fc',
+      name: 'Antho',
+      artistId: '123',
+      trackUrl: 'http://yaanhau',
+      duration: 180,
+    });
+  });
+
+  test('find', async () => {
+    const ds = new MongoDBSongDataSource(mockDatabase);
+    jest.spyOn(mockDatabase, 'find').mockImplementation(() =>
+      Promise.resolve([
+        {
+          _id: '123',
+          name: 'Antho',
+          artistId: '123',
+          trackUrl: 'http://yaanhau',
+          duration: 180,
+        },
+      ])
+    );
+    const result = await ds.find({
+      name: 'Antho',
+    });
+    expect(mockDatabase.find).toHaveBeenCalledWith({ $or: { name: 'Antho' } });
     expect(result).toStrictEqual([
       {
         id: '123',
