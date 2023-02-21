@@ -1,4 +1,3 @@
-import { DatabaseWrapper } from '../../data/interfaces/data-sources/database-wrapper';
 import { ArtistRepositoryImpl } from '../../domain/repositories/artist-repository';
 import { CreateArtist } from '../../domain/use-cases/artist/create-artist';
 import { DeleteArtist } from '../../domain/use-cases/artist/delete-artist';

@@ -15,6 +15,8 @@ import {
 import validate from '../../schemas/validate';
 import upload from '../upload/multer';
 import { Song } from '../../domain/entities/song';
+import { getMongoBucket } from '../../data/data-sources/mongodb/mongodb-helpers';
+import { ObjectId } from 'mongodb';
 
 export default function SongRouter(
   getAllSongsUseCase: GetAllSongUseCase,
@@ -49,6 +51,25 @@ export default function SongRouter(
   );
 
   router.get(
+    '/:fileName/stream',
+    validate(getOneSongSchema),
+    async (req: Request, res: Response) => {
+      try {
+        const bucket = await getMongoBucket();
+        res.status(200);
+        res.set({
+          'Content-Type': 'audio/mp3',
+          'Transfer-Encoding': 'chunked',
+        });
+        bucket.openDownloadStreamByName(req.params.fileName).pipe(res);
+      } catch (err) {
+        console.log(err);
+        res.status(500).send({ message: 'Error fetching dataaa' });
+      }
+    }
+  );
+
+  router.get(
     '/search/:searchString',
     validate(findSongSchema),
     async (req: Request, res: Response) => {
@@ -74,6 +95,7 @@ export default function SongRouter(
           res.status(400).send('File not uploaded');
           return;
         }
+
         const song = {
           ...req.body,
           trackUrl: req.file.filename,
