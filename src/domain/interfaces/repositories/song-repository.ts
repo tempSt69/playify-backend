@@ -5,6 +5,6 @@ export interface SongRepository {
   updateSong(id: string, song: Partial<Omit<Song, 'id'>>): Promise<boolean>;
   getAllSong(): Promise<Song[]>;
   getOneSong(id: string): Promise<Song | undefined>;
-  findSong(song: Partial<Omit<Song, 'id'>>): Promise<Song[]>;
+  findSong(searchString: string): Promise<Song[]>;
   deleteSong(id: string): Promise<boolean>;
 }

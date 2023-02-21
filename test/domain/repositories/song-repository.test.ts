@@ -1,24 +1,27 @@
-import { SongDataSource } from '../../../src/data/interfaces/data-sources/entity/song-data-source';
-import { Song } from '../../../src/domain/entities/song';
 import { SongRepositoryImpl } from '../../../src/domain/repositories/song-repository';
+import { NoSQLDatabaseWrapper } from '../../../src/data/interfaces/data-sources/nosql-database-wrapper';
+import { SongDataSource } from '../../../src/data/interfaces/data-sources/entity/song-data-source';
 
 class MockSongDataSource implements SongDataSource {
-  getAll(): Promise<Song[]> {
+  getAll(): Promise<any[]> {
     throw new Error('Method not implemented.');
   }
-  getOne(id: string): Promise<Song> {
+  find(query: object): Promise<any[]> {
     throw new Error('Method not implemented.');
   }
-  find(song: Partial<Song>): Promise<Song[]> {
+  findOne(id: string): Promise<any> {
     throw new Error('Method not implemented.');
   }
-  create(song: Song): Promise<boolean> {
+  insertOne(doc: any): Promise<any> {
     throw new Error('Method not implemented.');
   }
-  updateOne(id: string, data: Object): Promise<boolean> {
+  updateOne(id: string, data: Object): Promise<any> {
     throw new Error('Method not implemented.');
   }
-  deleteOne(id: string): Promise<boolean> {
+  deleteOne(id: string): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  search(searchString: string, field: string): Promise<any[]> {
     throw new Error('Method not implemented.');
   }
 }
@@ -63,7 +66,7 @@ describe('Song repository', () => {
         duration: 180,
       };
       jest
-        .spyOn(mockSongDataSource, 'getOne')
+        .spyOn(mockSongDataSource, 'findOne')
         .mockImplementation(() => Promise.resolve(expectedData));
 
       const result = await songRepository.getOneSong('1');
@@ -71,26 +74,23 @@ describe('Song repository', () => {
     });
   });
 
-  describe('findSong', () => {
+  describe('search song', () => {
     test('should return data', async () => {
       const expectedData = [
         {
-          id: '1',
+          _id: '1',
           name: 'Antho',
           artistId: '123',
           trackUrl: 'http://yaanhau',
           duration: 180,
         },
       ];
-      const inputData = {
-        name: 'Antho',
-        artistId: '123',
-      };
+      const inputData = 'Antho';
       jest
-        .spyOn(mockSongDataSource, 'find')
+        .spyOn(mockSongDataSource, 'search')
         .mockImplementation(() => Promise.resolve(expectedData));
 
-      const result = await songRepository.findSong(inputData);
+      const result = await songRepository.findSong(inputData, 'name');
       expect(result).toStrictEqual(expectedData);
     });
   });
@@ -105,7 +105,7 @@ describe('Song repository', () => {
         duration: 180,
       };
       jest
-        .spyOn(mockSongDataSource, 'create')
+        .spyOn(mockSongDataSource, 'insertOne')
         .mockImplementation(() => Promise.resolve(true));
 
       const result = await songRepository.createSong(inputData);

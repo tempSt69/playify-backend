@@ -1,8 +1,3 @@
-import { Artist } from '../../../../domain/entities/artist';
+import { NoSQLDatabaseWrapper } from '../nosql-database-wrapper';
 
-export interface ArtistDataSource {
-  create(artist: Artist): Promise<boolean>;
-  getAll(): Promise<Artist[]>;
-  deleteOne(id: string): Promise<boolean>;
-  updateOne(id: string, data: Object): Promise<boolean>;
-}
+export interface ArtistDataSource extends NoSQLDatabaseWrapper {}

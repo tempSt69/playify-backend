@@ -20,7 +20,7 @@ export class ArtistRepositoryImpl implements ArtistRepository {
   }
 
   async createArtist(artist: Artist): Promise<boolean> {
-    const result = await this.artistDataSource.create(artist);
+    const result = await this.artistDataSource.insertOne(artist);
     return result;
   }
 

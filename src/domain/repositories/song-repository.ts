@@ -15,17 +15,21 @@ export class SongRepositoryImpl implements SongRepository {
   }
 
   async getOneSong(id: string): Promise<Song | undefined> {
-    const result = await this.songDataSource.getOne(id);
+    const result = await this.songDataSource.findOne(id);
     return result;
   }
 
-  async findSong(song: Partial<Omit<Song, 'id'>>): Promise<Song[]> {
-    const result = await this.songDataSource.find(song);
+  async findSong(searchString: string): Promise<Song[]> {
+    const result = await this.songDataSource.search(
+      searchString,
+      this.songDataSource.searchField!,
+      this.songDataSource.searchIndex!
+    );
     return result;
   }
 
   async createSong(song: Song): Promise<boolean> {
-    const result = await this.songDataSource.create(song);
+    const result = await this.songDataSource.insertOne(song);
     return result;
   }
 

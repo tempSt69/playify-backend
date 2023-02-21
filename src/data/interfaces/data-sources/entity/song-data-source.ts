@@ -1,10 +1,3 @@
-import { Song } from '../../../../domain/entities/song';
+import { NoSQLDatabaseWrapper } from '../nosql-database-wrapper';
 
-export interface SongDataSource {
-  create(song: Song): Promise<boolean>;
-  getAll(): Promise<Song[]>;
-  getOne(id: string): Promise<Song | undefined>;
-  find(song: Partial<Omit<Song, 'id'>>): Promise<Song[]>;
-  deleteOne(id: string): Promise<boolean>;
-  updateOne(id: string, data: Object): Promise<boolean>;
-}
+export interface SongDataSource extends NoSQLDatabaseWrapper {}

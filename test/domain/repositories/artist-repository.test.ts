@@ -1,18 +1,26 @@
 import { ArtistDataSource } from '../../../src/data/interfaces/data-sources/entity/artist-data-source';
-import { Artist } from '../../../src/domain/entities/artist';
 import { ArtistRepositoryImpl } from '../../../src/domain/repositories/artist-repository';
 
 class MockArtistDataSource implements ArtistDataSource {
-  deleteOne(id: string): Promise<boolean> {
+  getAll(): Promise<any[]> {
     throw new Error('Method not implemented.');
   }
-  updateOne(id: string, data: Object): Promise<boolean> {
+  find(query: object): Promise<any[]> {
     throw new Error('Method not implemented.');
   }
-  create(artist: Artist): Promise<boolean> {
+  findOne(id: string): Promise<any> {
     throw new Error('Method not implemented.');
   }
-  getAll(): Promise<Artist[]> {
+  insertOne(doc: any): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  updateOne(id: string, data: Object): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  deleteOne(id: string): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  search(searchString: string, field: string): Promise<any[]> {
     throw new Error('Method not implemented.');
   }
 }
@@ -31,7 +39,7 @@ describe('Artist repository', () => {
     test('should return data', async () => {
       const expectedData = [
         {
-          id: '1',
+          _id: '1',
           name: 'Smith',
           cover: 'John',
         },
@@ -48,12 +56,12 @@ describe('Artist repository', () => {
   describe('createArtist', () => {
     test('should return true', async () => {
       const inputData = {
-        id: '1',
+        _id: '1',
         name: 'Smith',
         cover: 'John',
       };
       jest
-        .spyOn(mockArtistDataSource, 'create')
+        .spyOn(mockArtistDataSource, 'insertOne')
         .mockImplementation(() => Promise.resolve(true));
 
       const result = await artistRepository.createArtist(inputData);

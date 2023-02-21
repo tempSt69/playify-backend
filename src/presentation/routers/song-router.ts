@@ -15,9 +15,7 @@ import {
 } from '../../schemas/song-schema';
 import validate from '../../schemas/validate';
 import upload from '../upload/multer';
-import { Song } from '../../domain/entities/song';
 import { getMongoBucket } from '../../data/data-sources/mongodb/mongodb-helpers';
-import { ObjectId } from 'mongodb';
 
 export default function SongRouter(
   getAllSongsUseCase: GetAllSongUseCase,
@@ -34,6 +32,7 @@ export default function SongRouter(
       const songs = await getAllSongsUseCase.execute();
       res.send(songs);
     } catch (err) {
+      console.log(err);
       res.status(500).send({ message: 'Error fetching data' });
     }
   });
@@ -75,13 +74,11 @@ export default function SongRouter(
     validate(findSongSchema),
     async (req: Request, res: Response) => {
       try {
-        const fields: Partial<Omit<Song, 'id'>> = {
-          name: req.params.searchString,
-          artistId: req.params.searchString,
-        };
-        const songs = await findSongUseCase.execute(fields);
+        const songs = await findSongUseCase.execute(req.params.searchString);
         res.send(songs);
       } catch (err) {
+        console.log(err);
+
         res.status(500).send({ message: 'Error fetching data' });
       }
     }

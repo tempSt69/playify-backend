@@ -8,8 +8,8 @@ export class FindSong implements FindSongUseCase {
     this.songRepository = songRepository;
   }
 
-  async execute(song: Partial<Omit<Song, 'id'>>): Promise<Song[]> {
-    const result = await this.songRepository.findSong(song);
+  async execute(searchString: string): Promise<Song[]> {
+    const result = await this.songRepository.findSong(searchString);
     return result;
   }
 }
