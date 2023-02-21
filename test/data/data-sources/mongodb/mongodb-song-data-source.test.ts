@@ -57,9 +57,9 @@ describe('MongoDB datasource', () => {
       })
     );
     const result = await ds.getOne('63f37295e571cc2eb7d534fc');
-    expect(mockDatabase.findOne).toHaveBeenCalledWith(
-      new ObjectId('63f37295e571cc2eb7d534fc')
-    );
+    expect(mockDatabase.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('63f37295e571cc2eb7d534fc'),
+    });
     expect(result).toStrictEqual({
       id: '63f37295e571cc2eb7d534fc',
       name: 'Antho',
@@ -75,9 +75,9 @@ describe('MongoDB datasource', () => {
       .spyOn(mockDatabase, 'findOne')
       .mockImplementation(() => Promise.resolve(undefined));
     const result = await ds.getOne('63f37295e571cc2eb7d534fa');
-    expect(mockDatabase.findOne).toHaveBeenCalledWith(
-      new ObjectId('63f37295e571cc2eb7d534fa')
-    );
+    expect(mockDatabase.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('63f37295e571cc2eb7d534fa'),
+    });
     expect(result).toStrictEqual(undefined);
   });
 
