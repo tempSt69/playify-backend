@@ -1,4 +1,4 @@
-import { Artist } from '../../../domain/entities/artist';
+import { Artist } from '../../../../domain/entities/artist';
 
 export interface ArtistDataSource {
   create(artist: Artist): Promise<boolean>;

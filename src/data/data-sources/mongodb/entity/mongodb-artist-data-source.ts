@@ -1,14 +1,14 @@
-import { Db, ObjectId } from 'mongodb';
-import { Artist } from '../../../domain/entities/artist';
-import { ArtistDataSource } from '../../interfaces/data-sources/artist-data-source';
-import { DatabaseWrapper } from '../../interfaces/data-sources/database-wrapper';
-import MongoDBHandler from './mongodb';
+import { Db } from 'mongodb';
+import { Artist } from '../../../../domain/entities/artist';
+import { ArtistDataSource } from '../../../interfaces/data-sources/entity/artist-data-source';
+import { NoSQLDatabaseWrapper } from '../../../interfaces/data-sources/nosql-database-wrapper';
+import MongoDBHandler from '../mongodb';
 
 export class MongoDBArtistDataSource implements ArtistDataSource {
-  private database: DatabaseWrapper;
+  private database: NoSQLDatabaseWrapper;
   static collection = 'artists';
 
-  constructor(database: DatabaseWrapper) {
+  constructor(database: NoSQLDatabaseWrapper) {
     this.database = database;
   }
   async deleteOne(id: string): Promise<boolean> {
@@ -33,6 +33,6 @@ export class MongoDBArtistDataSource implements ArtistDataSource {
   }
 }
 
-export function getArtistDatabase(db: Db): DatabaseWrapper {
+export function getArtistDatabase(db: Db): NoSQLDatabaseWrapper {
   return new MongoDBHandler(db, MongoDBArtistDataSource.collection);
 }

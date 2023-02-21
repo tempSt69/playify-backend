@@ -1,9 +1,9 @@
-import { DatabaseWrapper } from '../../../../src/data/interfaces/data-sources/database-wrapper';
-import { MongoDBSongDataSource } from '../../../../src/data/data-sources/mongodb/mongodb-song-data-source';
+import { NoSQLDatabaseWrapper } from '../../../../src/data/interfaces/data-sources/nosql-database-wrapper';
+import { MongoDBSongDataSource } from '../../../../src/data/data-sources/mongodb/entity/mongodb-song-data-source';
 import { ObjectId } from 'mongodb';
 
 describe('MongoDB datasource', () => {
-  let mockDatabase: DatabaseWrapper;
+  let mockDatabase: NoSQLDatabaseWrapper;
 
   beforeAll(() => {
     mockDatabase = {

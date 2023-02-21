@@ -1,17 +1,17 @@
-import { Song } from '../../../domain/entities/song';
-import { SongDataSource } from '../../interfaces/data-sources/song-data-source';
-import { DatabaseWrapper } from '../../interfaces/data-sources/database-wrapper';
+import { Song } from '../../../../domain/entities/song';
+import { SongDataSource } from '../../../interfaces/data-sources/entity/song-data-source';
+import { NoSQLDatabaseWrapper } from '../../../interfaces/data-sources/nosql-database-wrapper';
 import { Db, ObjectId } from 'mongodb';
-import MongoDBHandler from './mongodb';
+import MongoDBHandler from '../mongodb';
 
 export class MongoDBSongDataSource implements SongDataSource {
-  private database: DatabaseWrapper;
+  private database: NoSQLDatabaseWrapper;
   static collection = 'songs';
-  constructor(database: DatabaseWrapper) {
+  constructor(database: NoSQLDatabaseWrapper) {
     this.database = database;
   }
   async getOne(id: string): Promise<Song | undefined> {
-    const item = await this.database.findOne(new ObjectId(id));
+    const item = await this.database.findOne({ _id: new ObjectId(id) });
     if (!item) {
       return undefined;
     }
@@ -56,6 +56,6 @@ export class MongoDBSongDataSource implements SongDataSource {
     }));
   }
 }
-export function getSongDatabase(db: Db): DatabaseWrapper {
+export function getSongDatabase(db: Db): NoSQLDatabaseWrapper {
   return new MongoDBHandler(db, MongoDBSongDataSource.collection);
 }

@@ -1,5 +1,5 @@
 import { Db, ObjectId } from 'mongodb';
-import { DatabaseWrapper } from '../../interfaces/data-sources/database-wrapper';
+import { DatabaseWrapper } from '../../interfaces/data-sources/nosql-database-wrapper';
 
 export default class MongoDBHandler implements DatabaseWrapper {
   private db: Db;

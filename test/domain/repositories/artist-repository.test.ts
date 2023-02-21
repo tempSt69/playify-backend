@@ -1,4 +1,4 @@
-import { ArtistDataSource } from '../../../src/data/interfaces/data-sources/artist-data-source';
+import { ArtistDataSource } from '../../../src/data/interfaces/data-sources/entity/artist-data-source';
 import { Artist } from '../../../src/domain/entities/artist';
 import { ArtistRepositoryImpl } from '../../../src/domain/repositories/artist-repository';
 

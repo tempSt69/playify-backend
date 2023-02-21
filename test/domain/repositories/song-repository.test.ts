@@ -1,4 +1,4 @@
-import { SongDataSource } from '../../../src/data/interfaces/data-sources/song-data-source';
+import { SongDataSource } from '../../../src/data/interfaces/data-sources/entity/song-data-source';
 import { Song } from '../../../src/domain/entities/song';
 import { SongRepositoryImpl } from '../../../src/domain/repositories/song-repository';
 

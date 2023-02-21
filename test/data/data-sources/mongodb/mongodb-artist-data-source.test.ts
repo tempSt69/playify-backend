@@ -1,8 +1,8 @@
-import { DatabaseWrapper } from '../../../../src/data/interfaces/data-sources/database-wrapper';
-import { MongoDBArtistDataSource } from '../../../../src/data/data-sources/mongodb/mongodb-artist-data-source';
+import { NoSQLDatabaseWrapper } from '../../../../src/data/interfaces/data-sources/nosql-database-wrapper';
+import { MongoDBArtistDataSource } from '../../../../src/data/data-sources/mongodb/entity/mongodb-artist-data-source';
 
 describe('MongoDB datasource', () => {
-  let mockDatabase: DatabaseWrapper;
+  let mockDatabase: NoSQLDatabaseWrapper;
 
   beforeAll(() => {
     mockDatabase = {
