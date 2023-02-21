@@ -16,11 +16,10 @@
 <div align="center">
   <a href="https://github.com/tempSt69/playify-backend">Playify - Backend</a>
 
-<h3 align="center">Playify</h3>
+<h3 align="center">Playify - Clean Architecture Pattern</h3>
 
-  <p align="center">
-    This is the backend of my Playify app. 
-    It's a Nodejs API that allow a front-end to stream musics.
+  <p>
+    This is the backend of my Playify app using Typescript, NodeJS, Express and a Clean Architecture Pattern
     <br />
     <!-- <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
     <br />
@@ -60,18 +59,19 @@
 
 ## About The Project
 
-Playify is a small Spotify like web app, builded following the "Clean Architecture" pattern.
+Playify is a small Spotify like web app, builded following the Clean Architecture pattern.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
 <ul>
+    <li>Clean Architecture Pattern</li>
+    <li>Typescript</li>
     <li>NodeJS</li>
     <li>Express</li>
-    <li>Jest (Unit testing)</li>
     <li>MongoDB Atlas</li>
-    <li>Clean Architecture</li>
+    <li>Jest (Unit testing)</li>
 </ul>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
