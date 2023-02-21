@@ -10,6 +10,7 @@ import {
   deleteSongSchema,
   findSongSchema,
   getOneSongSchema,
+  streamSongSchema,
   updateSongSchema,
 } from '../../schemas/song-schema';
 import validate from '../../schemas/validate';
@@ -52,13 +53,13 @@ export default function SongRouter(
 
   router.get(
     '/:fileName/stream',
-    validate(getOneSongSchema),
+    validate(streamSongSchema),
     async (req: Request, res: Response) => {
       try {
         const bucket = await getMongoBucket();
         res.status(200);
         res.set({
-          'Content-Type': 'audio/mp3',
+          'Content-Type': 'audio/mpeg',
           'Transfer-Encoding': 'chunked',
         });
         bucket.openDownloadStreamByName(req.params.fileName).pipe(res);

@@ -1,7 +1,7 @@
 import { Db, ObjectId } from 'mongodb';
-import { DatabaseWrapper } from '../../interfaces/data-sources/nosql-database-wrapper';
+import { NoSQLDatabaseWrapper } from '../../interfaces/data-sources/nosql-database-wrapper';
 
-export default class MongoDBHandler implements DatabaseWrapper {
+export default class MongoDBHandler implements NoSQLDatabaseWrapper {
   private db: Db;
   private collection: string;
   constructor(db: Db, collection: string) {
