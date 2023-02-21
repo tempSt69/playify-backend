@@ -90,7 +90,7 @@ describe('Song repository', () => {
         .spyOn(mockSongDataSource, 'search')
         .mockImplementation(() => Promise.resolve(expectedData));
 
-      const result = await songRepository.findSong(inputData, 'name');
+      const result = await songRepository.findSong(inputData);
       expect(result).toStrictEqual(expectedData);
     });
   });

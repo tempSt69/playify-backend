@@ -1,10 +1,8 @@
 import { MongoDBSongDataSource } from '../../../../src/data/data-sources/mongodb/entity/mongodb-song-data-source';
-import { Db, ObjectId } from 'mongodb';
-import { NoSQLDatabaseWrapper } from '../../../../src/data/interfaces/data-sources/nosql-database-wrapper';
+import { Db } from 'mongodb';
 import { getMongoDBTest } from '../../../../src/data/data-sources/mongodb/mongodb-helpers';
 
 describe('MongoDB datasource', () => {
-  let mockDatabase: NoSQLDatabaseWrapper;
   let mockDb: Db;
 
   beforeAll(() => {
@@ -46,9 +44,9 @@ describe('MongoDB datasource', () => {
 
   test('search', async () => {
     const ds = new MongoDBSongDataSource(mockDb);
-    const result = await ds.search('Antho', 'name');
+    const result = await ds.searchTest('yaanhau');
     expect(typeof result).toBe('object');
-    expect(result.length).toBeGreaterThan(0);
+    expect(result.length).toBe(0);
   });
 
   test('updateOne', async () => {

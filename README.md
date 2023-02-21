@@ -80,7 +80,7 @@ Playify is a small Spotify like web app, builded following the Clean Architectur
 
 ## Getting Started
 
-Create `.env` file and simply add your personnal `ATLAS_URI`.
+Rename `.env.template` to `.env` or simply change your personnal `ATLAS_URI` && `ATLAS_TEST_URI`.
 
 ### Installation
 
