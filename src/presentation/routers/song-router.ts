@@ -51,17 +51,22 @@ export default function SongRouter(
   );
 
   router.get(
-    '/:fileName/stream',
+    '/:id/stream',
     validate(streamSongSchema),
     async (req: Request, res: Response) => {
       try {
+        const song = await getOneSongUseCase.execute(req.params.id);
+        if (!song) {
+          res.status(400).send(`Song not found ${req.params.id}`);
+          return;
+        }
         const bucket = await getMongoBucket();
         res.status(200);
         res.set({
-          'Content-Type': 'audio/mpeg',
+          'Content-Type': song.trackType,
           'Transfer-Encoding': 'chunked',
         });
-        bucket.openDownloadStreamByName(req.params.fileName).pipe(res);
+        bucket.openDownloadStreamByName(song.trackUrl).pipe(res);
       } catch (err) {
         console.log(err);
         res.status(500).send({ message: 'Error fetching dataaa' });
