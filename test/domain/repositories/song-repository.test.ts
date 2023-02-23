@@ -42,8 +42,12 @@ describe('Song repository', () => {
         {
           id: '1',
           name: 'Antho',
-          artistId: '123',
+          artist: {
+            name: 'okikk',
+            cover: 'hyhydsf',
+          },
           trackUrl: 'http://yaanhau',
+          trackType: 'audio/mpeg',
           duration: 180,
         },
       ];
@@ -61,8 +65,12 @@ describe('Song repository', () => {
       const expectedData = {
         id: '1',
         name: 'Antho',
-        artistId: '123',
+        artist: {
+          name: 'okikk',
+          cover: 'hyhydsf',
+        },
         trackUrl: 'http://yaanhau',
+        trackType: 'audio/mpeg',
         duration: 180,
       };
       jest
@@ -80,8 +88,12 @@ describe('Song repository', () => {
         {
           _id: '1',
           name: 'Antho',
-          artistId: '123',
+          artist: {
+            name: 'okikk',
+            cover: 'hyhydsf',
+          },
           trackUrl: 'http://yaanhau',
+          trackType: 'audio/mpeg',
           duration: 180,
         },
       ];
@@ -100,8 +112,12 @@ describe('Song repository', () => {
       const inputData = {
         id: '1',
         name: 'Antho',
-        artistId: '123',
+        artist: {
+          name: 'okikk',
+          cover: 'hyhydsf',
+        },
         trackUrl: 'http://yaanhau',
+        trackType: 'audio/mpeg',
         duration: 180,
       };
       jest
@@ -117,8 +133,12 @@ describe('Song repository', () => {
     test('should return true', async () => {
       const inputData = {
         name: 'Antho',
-        artistId: '123',
+        artist: {
+          name: 'okikk',
+          cover: 'hyhydsf',
+        },
         trackUrl: 'http://yaanhau',
+        trackType: 'audio/mpeg',
         duration: 180,
       };
       jest

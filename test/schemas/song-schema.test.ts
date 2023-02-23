@@ -15,7 +15,10 @@ describe('SONGS: Zod schemas validator', () => {
     const inputData = {
       body: {
         name: 'Antho',
-        artistId: '12345678',
+        artist: {
+          name: 'okhu',
+          cover: 'okjnj',
+        },
         duration: 180,
       },
     };
@@ -27,7 +30,10 @@ describe('SONGS: Zod schemas validator', () => {
     const inputData = {
       body: {
         name: 'Antho',
-        artistIdd: '12345678',
+        artist: {
+          namedd: 'okhu',
+          cover: 'okjnj',
+        },
         duration: 180,
       },
     };
@@ -42,7 +48,10 @@ describe('SONGS: Zod schemas validator', () => {
       },
       body: {
         name: 'Antho',
-        artistId: '12345678',
+        artist: {
+          name: 'okhu',
+          cover: 'okjnj',
+        },
         duration: 180,
       },
     };

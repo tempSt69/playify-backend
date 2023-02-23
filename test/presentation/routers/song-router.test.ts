@@ -83,8 +83,12 @@ describe('Song router', () => {
         {
           id: '1',
           name: 'Antho',
-          artistId: '123',
+          artist: {
+            name: 'okhu',
+            cover: 'okjnj',
+          },
           trackUrl: 'http://yaanhau',
+          trackType: 'audio/mpeg',
           duration: 180,
         },
       ];
@@ -114,9 +118,13 @@ describe('Song router', () => {
       const ExpectedData = {
         id: '1',
         name: 'Antho',
-        artistId: '123',
+        artist: {
+          name: 'okikk',
+          cover: 'hyhydsf',
+        },
         trackUrl: 'http://yaanhau',
         duration: 180,
+        trackType: 'audio/mpeg',
       };
       jest
         .spyOn(mockGetOneSongUseCase, 'execute')
@@ -145,8 +153,12 @@ describe('Song router', () => {
         {
           id: '1',
           name: 'Antho',
-          artistId: '123',
+          artist: {
+            name: 'okikk',
+            cover: 'hyhydsf',
+          },
           trackUrl: 'http://yaanhau',
+          trackType: 'audio/mpeg',
           duration: 180,
         },
       ];
@@ -171,6 +183,7 @@ describe('Song router', () => {
     });
   });
 
+  //TODO
   describe('POST /song', () => {
     test('POST /song returns 201', async () => {
       jest
@@ -180,7 +193,7 @@ describe('Song router', () => {
       const response = await request(server)
         .post('/song')
         .field('name', 'Hey')
-        .field('artistId', '176655')
+        .field('artist', '176655')
         .field('duration', '180');
       expect(response.status).toBe(400); //TODO THINGS HERE
     });
@@ -203,7 +216,10 @@ describe('Song router', () => {
     test('PATCH /song returns 201', async () => {
       const InputData = {
         name: 'Antho',
-        artistId: '123',
+        artist: {
+          name: 'okikk',
+          cover: 'hyhydsf',
+        },
         duration: 180,
       };
       jest
@@ -219,7 +235,10 @@ describe('Song router', () => {
     test('PATCH /song returns 500 on use case error', async () => {
       const InputData = {
         name: 'Antho',
-        artistId: '123',
+        artist: {
+          name: 'okikk',
+          cover: 'hyhydsf',
+        },
         duration: 180,
       };
       jest

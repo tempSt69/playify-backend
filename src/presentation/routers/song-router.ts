@@ -97,6 +97,7 @@ export default function SongRouter(
         const song = {
           ...req.body,
           trackUrl: req.file.filename,
+          trackType: req.file.mimetype,
         };
         await createSongUseCase.execute(song);
         res.statusCode = 201;

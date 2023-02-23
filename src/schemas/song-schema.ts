@@ -7,11 +7,18 @@ export const createSongSchema = z.object({
         required_error: 'Name is required',
       })
       .min(1),
-    artistId: z
-      .string({
-        required_error: 'ArtistId is required',
-      })
-      .min(3),
+    artist: z.object({
+      name: z
+        .string({
+          required_error: 'Artist Name is required',
+        })
+        .min(3),
+      cover: z
+        .string({
+          required_error: 'Artist Cover is required',
+        })
+        .min(3),
+    }),
     duration: z.number({
       required_error: 'duration in second is required',
     }),
@@ -20,29 +27,16 @@ export const createSongSchema = z.object({
 
 export const updateSongSchema = z.object({
   body: z.object({
-    name: z
-      .string({
-        required_error: 'Name is required',
-      })
-      .min(1)
-      .optional(),
-    trackUrl: z
-      .string({
-        required_error: 'TrackUrl is required',
-      })
-      .min(10)
-      .optional(),
+    name: z.string().min(1).optional(),
+    trackUrl: z.string().min(10).optional(),
+    trackType: z.string().min(10).optional(),
     artistId: z
-      .string({
-        required_error: 'ArtistId is required',
-      })
-      .min(3)
-      .optional(),
-    duration: z
-      .number({
-        required_error: 'duration in second is required',
+      .object({
+        name: z.string().min(3).optional(),
+        cover: z.string().min(3).optional(),
       })
       .optional(),
+    duration: z.number().optional(),
   }),
   params: z.object({
     id: z.string({ required_error: 'Param id is required' }).min(8),
@@ -75,5 +69,6 @@ export const findSongSchema = z.object({
 export const streamSongSchema = z.object({
   params: z.object({
     fileName: z.string({ required_error: 'Param fileName is required' }).min(8),
+    mimeType: z.string({ required_error: 'Param mimeType is required' }).min(5),
   }),
 });
