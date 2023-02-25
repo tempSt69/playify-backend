@@ -40,9 +40,11 @@ export default function s3Helpers() {
         res.status(500).send({ message: 'Error streaming file from S3' });
       });
 
+      res.set('Accept-Ranges', 'bytes');
       res.set('Content-Type', data.ContentType);
       res.set('Content-Length', data.ContentLength?.toString());
       res.set('ETag', data.ETag);
+      res.status(200);
 
       stream.on('end', () => {
         console.log('Served by Amazon S3 file');
