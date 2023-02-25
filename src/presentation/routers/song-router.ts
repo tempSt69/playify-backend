@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { CreateSongUseCase } from '../../domain/interfaces/use-cases/song/create-song';
 import { DeleteSongUseCase } from '../../domain/interfaces/use-cases/song/delete-song';
 import { GetAllSongUseCase } from '../../domain/interfaces/use-cases/song/get-all-song';
@@ -15,7 +15,7 @@ import {
 } from '../../schemas/song-schema';
 import validate from '../../schemas/validate';
 import upload from '../upload/multer';
-import { getMongoBucket } from '../../data/data-sources/mongodb/mongodb-helpers';
+import s3Helpers, { MulterFile } from '../../data/data-sources/aws/aws-helpers';
 
 export default function SongRouter(
   getAllSongsUseCase: GetAllSongUseCase,
@@ -60,13 +60,15 @@ export default function SongRouter(
           res.status(400).send(`Song not found ${req.params.id}`);
           return;
         }
-        const bucket = await getMongoBucket();
+        /*const bucket = await getMongoBucket();
         res.status(200);
         res.set({
           'Content-Type': song.trackType,
           'Transfer-Encoding': 'chunked',
         });
-        bucket.openDownloadStreamByName(song.trackUrl).pipe(res);
+        bucket.openDownloadStreamByName(song.trackUrl).pipe(res);*/
+        const { stream } = s3Helpers();
+        stream(song.trackUrl, res);
       } catch (err) {
         console.log(err);
         res.status(500).send({ message: 'Error fetching dataaa' });
@@ -94,14 +96,16 @@ export default function SongRouter(
     upload.single('song'),
     async (req: Request, res: Response) => {
       try {
-        if (!req.file?.filename) {
+        if (!req.file?.size) {
           res.status(400).send('File not uploaded');
           return;
         }
 
+        const uploadedFile = req.file as unknown as MulterFile;
+
         const song = {
           ...req.body,
-          trackUrl: req.file.filename,
+          trackUrl: uploadedFile.key,
           trackType: req.file.mimetype,
         };
         await createSongUseCase.execute(song);
@@ -109,7 +113,6 @@ export default function SongRouter(
         res.send({ message: 'Created' });
       } catch (err: any) {
         console.log(err.message, 'error');
-
         res.status(500).send({ message: 'Error saving data' });
       }
     }

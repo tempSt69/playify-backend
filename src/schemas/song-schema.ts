@@ -68,7 +68,6 @@ export const findSongSchema = z.object({
 
 export const streamSongSchema = z.object({
   params: z.object({
-    fileName: z.string({ required_error: 'Param fileName is required' }).min(8),
-    mimeType: z.string({ required_error: 'Param mimeType is required' }).min(5),
+    id: z.string({ required_error: 'Param id is required' }).min(8),
   }),
 });
