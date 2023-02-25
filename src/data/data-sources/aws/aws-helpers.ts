@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { S3Client } from '@aws-sdk/client-s3';
-import AWS from 'aws-sdk';
+import AWS, { AWSError } from 'aws-sdk';
 import s3Storage from 'multer-s3';
 
 const AWS_KEY = process.env.AWS_ACCESS_KEY_ID!;
@@ -36,15 +36,15 @@ export default function s3Helpers() {
       }
       var stream = awsS3.getObject(params).createReadStream();
 
-      stream.on('error', function error(err) {
-        res.status(500).send({ message: 'Error streaming file from S3' });
+      stream.on('error', function error(err: AWSError) {
+        if (err.code != 'TimeoutError')
+          res.status(500).send({ message: 'Error streaming file from S3' });
       });
 
       res.set('Accept-Ranges', 'bytes');
       res.set('Content-Type', data.ContentType);
       res.set('Content-Length', data.ContentLength?.toString());
       res.set('ETag', data.ETag);
-      res.status(200);
 
       stream.on('end', () => {
         console.log('Served by Amazon S3 file');
