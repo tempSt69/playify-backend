@@ -96,7 +96,7 @@ export default function SongRouter(
     upload.single('song'),
     async (req: Request, res: Response) => {
       try {
-        if (!req.file?.size) {
+        if (!req.file?.mimetype) {
           res.status(400).send('File not uploaded');
           return;
         }
