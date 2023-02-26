@@ -16,6 +16,8 @@ import {
 import validate from '../../schemas/validate';
 import upload from '../upload/multer';
 import s3Helpers, { MulterFile } from '../../data/data-sources/aws/aws-helpers';
+import { authMiddleware } from '../middlewares/user-middleware';
+import { ROLES } from '../../domain/entities/user';
 
 export default function SongRouter(
   getAllSongsUseCase: GetAllSongUseCase,
@@ -93,6 +95,7 @@ export default function SongRouter(
 
   router.post(
     '/',
+    authMiddleware(ROLES.ADMIN),
     upload.single('song'),
     async (req: Request, res: Response) => {
       try {
@@ -120,6 +123,7 @@ export default function SongRouter(
 
   router.patch(
     '/:id',
+    authMiddleware(ROLES.ADMIN),
     validate(updateSongSchema),
     async (req: Request, res: Response) => {
       try {
@@ -134,6 +138,7 @@ export default function SongRouter(
 
   router.delete(
     '/:id',
+    authMiddleware(ROLES.ADMIN),
     validate(deleteSongSchema),
     async (req: Request, res: Response) => {
       try {

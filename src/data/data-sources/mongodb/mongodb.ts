@@ -39,17 +39,23 @@ export default class MongoDBHandler implements NoSQLDatabaseWrapper {
       .collection(this.collection)
       .findOne({ _id: new ObjectId(id) });
   }
-  insertOne(doc: any): Promise<any> {
-    return this.db.collection(this.collection).insertOne(doc);
+  findOneFilter(filter: object): Promise<any> {
+    return this.db.collection(this.collection).findOne(filter);
   }
-  updateOne(id: string, data: Object): Promise<any> {
-    return this.db
+  async insertOne(doc: any): Promise<any> {
+    const result = await this.db.collection(this.collection).insertOne(doc);
+    return result.acknowledged;
+  }
+  async updateOne(id: string, data: Object): Promise<any> {
+    const result = await this.db
       .collection(this.collection)
       .updateOne({ _id: new ObjectId(id) }, { $set: data });
+    return result.acknowledged && result.matchedCount === 1;
   }
-  deleteOne(id: string): Promise<any> {
-    return this.db
+  async deleteOne(id: string): Promise<any> {
+    const result = await this.db
       .collection(this.collection)
       .deleteOne({ _id: new ObjectId(id) });
+    return result.acknowledged && result.deletedCount === 1;
   }
 }

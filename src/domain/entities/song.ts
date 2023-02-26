@@ -1,7 +1,7 @@
 import { Artist } from './artist';
 
 export interface Song {
-  id?: string;
+  _id?: string;
   name: string;
   trackUrl: string;
   trackType: string;

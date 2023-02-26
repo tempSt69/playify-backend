@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { ROLES } from '../../domain/entities/user';
 import { CreateArtistUseCase } from '../../domain/interfaces/use-cases/artist/create-artist';
 import { DeleteArtistUseCase } from '../../domain/interfaces/use-cases/artist/delete-artist';
 import { GetAllArtistUseCase } from '../../domain/interfaces/use-cases/artist/get-all-artist';
@@ -9,6 +10,7 @@ import {
   updateArtistSchema,
 } from '../../schemas/artist-schema';
 import validate from '../../schemas/validate';
+import { authMiddleware } from '../middlewares/user-middleware';
 
 export default function ArtistRouter(
   getAllArtistsUseCase: GetAllArtistUseCase,
@@ -29,6 +31,7 @@ export default function ArtistRouter(
 
   router.post(
     '/',
+    authMiddleware(ROLES.ADMIN),
     validate(createArtistSchema),
     async (req: Request, res: Response) => {
       try {
@@ -43,6 +46,7 @@ export default function ArtistRouter(
 
   router.patch(
     '/:id',
+    authMiddleware(ROLES.ADMIN),
     validate(updateArtistSchema),
     async (req: Request, res: Response) => {
       try {
@@ -60,6 +64,7 @@ export default function ArtistRouter(
 
   router.delete(
     '/:id',
+    authMiddleware(ROLES.ADMIN),
     validate(deleteArtistSchema),
     async (req: Request, res: Response) => {
       try {

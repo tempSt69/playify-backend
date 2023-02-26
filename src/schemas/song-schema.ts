@@ -28,9 +28,9 @@ export const createSongSchema = z.object({
       required_error: 'duration in second is required',
     }),
   }),
-  file: z.object({
-    song: z.instanceof(File),
-  }),
+  // file: z.object({
+  //   song: z.instanceof(File),
+  // }),
 });
 
 export const updateSongSchema = z.object({
