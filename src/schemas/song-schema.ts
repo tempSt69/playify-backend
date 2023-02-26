@@ -8,6 +8,11 @@ export const createSongSchema = z.object({
       })
       .min(1),
     artist: z.object({
+      _id: z
+        .string({
+          required_error: 'Artist id is required',
+        })
+        .min(3),
       name: z
         .string({
           required_error: 'Artist Name is required',
@@ -22,6 +27,9 @@ export const createSongSchema = z.object({
     duration: z.number({
       required_error: 'duration in second is required',
     }),
+  }),
+  file: z.object({
+    song: z.instanceof(File),
   }),
 });
 
