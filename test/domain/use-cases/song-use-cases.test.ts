@@ -1,11 +1,11 @@
-import { Song } from '../../../../src/domain/entities/song';
-import { SongRepository } from '../../../../src/domain/interfaces/repositories/song-repository';
-import { CreateSong } from '../../../../src/domain/use-cases/song/create-song';
-import { DeleteSong } from '../../../../src/domain/use-cases/song/delete-song';
-import { GetAllSong } from '../../../../src/domain/use-cases/song/get-all-song';
-import { UpdateSong } from '../../../../src/domain/use-cases/song/update-song';
-import { GetOneSong } from '../../../../src/domain/use-cases/song/get-one-song';
-import { FindSong } from '../../../../src/domain/use-cases/song/find-song';
+import { Song } from '../../../src/domain/entities/song';
+import { SongRepository } from '../../../src/domain/interfaces/repositories/song-repository';
+import { CreateSong } from '../../../src/domain/use-cases/song/create-song';
+import { DeleteSong } from '../../../src/domain/use-cases/song/delete-song';
+import { GetAllSong } from '../../../src/domain/use-cases/song/get-all-song';
+import { UpdateSong } from '../../../src/domain/use-cases/song/update-song';
+import { GetOneSong } from '../../../src/domain/use-cases/song/get-one-song';
+import { FindSong } from '../../../src/domain/use-cases/song/find-song';
 
 describe('Songs use case', () => {
   class MockSongRepository implements SongRepository {
@@ -15,7 +15,7 @@ describe('Songs use case', () => {
     getOneSong(id: string): Promise<Song> {
       throw new Error('Method not implemented.');
     }
-    findSong(song: Partial<Omit<Song, 'id'>>): Promise<Song[]> {
+    findSong(searchString: string): Promise<Song[]> {
       throw new Error('Method not implemented.');
     }
     updateSong(id: string, song: Partial<Omit<Song, 'id'>>): Promise<boolean> {
@@ -42,10 +42,15 @@ describe('Songs use case', () => {
   test('getall -> return somthing', async () => {
     const ExpectedData = [
       {
-        id: '1',
+        _id: '1',
         name: 'Smith',
-        artistId: '123',
-        trackUrl: 'https://ahahhaa',
+        artist: {
+          _id: '12344',
+          name: 'smith',
+          cover: 'https://snowball.gg',
+        },
+        trackType: 'audio/mpeg',
+        trackUrl: '16516',
         duration: 180,
       },
     ];
@@ -61,10 +66,15 @@ describe('Songs use case', () => {
 
   test('getone -> return somthing', async () => {
     const ExpectedData = {
-      id: '1',
+      _id: '1',
       name: 'Smith',
-      artistId: '123',
-      trackUrl: 'https://ahahhaa',
+      artist: {
+        _id: '12344',
+        name: 'smith',
+        cover: 'https://snowball.gg',
+      },
+      trackType: 'audio/mpeg',
+      trackUrl: '16516',
       duration: 180,
     };
     jest
@@ -79,16 +89,19 @@ describe('Songs use case', () => {
   test('find -> return somthing', async () => {
     const ExpectedData = [
       {
-        id: '1',
+        _id: '1',
         name: 'Smith',
-        artistId: '123',
-        trackUrl: 'https://ahahhaa',
+        artist: {
+          _id: '12344',
+          name: 'smith',
+          cover: 'https://snowball.gg',
+        },
+        trackType: 'audio/mpeg',
+        trackUrl: '16516',
         duration: 180,
       },
     ];
-    const InputData = {
-      name: 'Smith',
-    };
+    const InputData = 'Smith';
     jest
       .spyOn(mockSongRepository, 'findSong')
       .mockImplementation(() => Promise.resolve(ExpectedData));
@@ -100,10 +113,15 @@ describe('Songs use case', () => {
 
   test('create -> should return true', async () => {
     const InputData = {
-      id: '1',
+      _id: '1',
       name: 'Smith',
-      artistId: '123',
-      trackUrl: 'https://ahahhaa',
+      artist: {
+        _id: '12344',
+        name: 'smith',
+        cover: 'https://snowball.gg',
+      },
+      trackType: 'audio/mpeg',
+      trackUrl: '16516',
       duration: 180,
     };
     jest
@@ -118,8 +136,13 @@ describe('Songs use case', () => {
   test('update -> should return true', async () => {
     const InputData = {
       name: 'Smith',
-      artistId: '123',
-      trackUrl: 'https://ahahhaa',
+      artist: {
+        _id: '12344',
+        name: 'smith',
+        cover: 'https://snowball.gg',
+      },
+      trackType: 'audio/mpeg',
+      trackUrl: '16516',
       duration: 180,
     };
     jest

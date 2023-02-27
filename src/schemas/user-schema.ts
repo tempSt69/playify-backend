@@ -6,7 +6,9 @@ export const loginSchema = z.object({
       .string({
         required_error: 'email is required',
       })
-      .email(),
+      .email({
+        message: 'Wrong email format',
+      }),
     hash: z
       .string({
         required_error: 'Password is required',
@@ -21,7 +23,9 @@ export const signupSchema = z.object({
       .string({
         required_error: 'email is required',
       })
-      .email(),
+      .email({
+        message: 'Wrong email format',
+      }),
     hash: z
       .string({
         required_error: 'Password is required',

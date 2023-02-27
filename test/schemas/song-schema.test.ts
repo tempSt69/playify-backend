@@ -16,8 +16,9 @@ describe('SONGS: Zod schemas validator', () => {
       body: {
         name: 'Antho',
         artist: {
+          _id: 'BNYTVTYJV',
           name: 'okhu',
-          cover: 'okjnj',
+          cover: 'https://snowball.gg',
         },
         duration: 180,
       },
@@ -49,8 +50,9 @@ describe('SONGS: Zod schemas validator', () => {
       body: {
         name: 'Antho',
         artist: {
+          _id: '1768TBHHJBJ',
           name: 'okhu',
-          cover: 'okjnj',
+          cover: 'https://snowball.gg',
         },
         duration: 180,
       },
@@ -66,7 +68,7 @@ describe('SONGS: Zod schemas validator', () => {
       },
       body: {
         name: 'Antho',
-        artistIdd: '12345678',
+        artist: '12345678',
         duration: 180,
       },
     };

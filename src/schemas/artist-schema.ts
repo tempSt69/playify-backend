@@ -11,14 +11,16 @@ export const createArtistSchema = z.object({
       .string({
         required_error: 'Cover is required',
       })
-      .min(3),
+      .url({
+        message: 'Cover must be an URL',
+      }),
   }),
 });
 
 export const updateArtistSchema = z.object({
   body: z.object({
     name: z.string().min(3).optional(),
-    cover: z.string().min(3).optional(),
+    cover: z.string().url({ message: 'Cover must be an URL' }).optional(),
   }),
   params: z.object({
     id: z.string({ required_error: 'Params id is required' }).min(8),

@@ -3,6 +3,12 @@ import { NoSQLDatabaseWrapper } from '../../../src/data/interfaces/data-sources/
 import { SongDataSource } from '../../../src/data/interfaces/data-sources/entity/song-data-source';
 
 class MockSongDataSource implements SongDataSource {
+  findOneFilter(filter: object): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  searchIndex?: string | undefined;
+  searchIndexText?: string | undefined;
+  searchField?: string | undefined;
   getAll(): Promise<any[]> {
     throw new Error('Method not implemented.');
   }

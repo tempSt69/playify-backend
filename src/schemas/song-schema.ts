@@ -22,7 +22,7 @@ export const createSongSchema = z.object({
         .string({
           required_error: 'Artist Cover is required',
         })
-        .min(3),
+        .url({ message: 'Cover must be an URL' }),
     }),
     duration: z.number({
       required_error: 'duration in second is required',
@@ -38,10 +38,11 @@ export const updateSongSchema = z.object({
     name: z.string().min(1).optional(),
     trackUrl: z.string().min(10).optional(),
     trackType: z.string().min(10).optional(),
-    artistId: z
+    artist: z
       .object({
+        _id: z.string().min(3).optional(),
         name: z.string().min(3).optional(),
-        cover: z.string().min(3).optional(),
+        cover: z.string().url({ message: 'Cover must be an URL' }).optional(),
       })
       .optional(),
     duration: z.number().optional(),

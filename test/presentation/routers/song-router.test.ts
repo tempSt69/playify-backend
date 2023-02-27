@@ -8,6 +8,8 @@ import { GetOneSongUseCase } from '../../../src/domain/interfaces/use-cases/song
 import { FindSongUseCase } from '../../../src/domain/interfaces/use-cases/song/find-song';
 import SongRouter from '../../../src/presentation/routers/song-router';
 import server from '../../../src/server';
+import jwt from 'jsonwebtoken';
+import { ROLES } from '../../../src/domain/entities/user';
 
 class MockGetAllSongUseCase implements GetAllSongUseCase {
   execute(): Promise<Song[]> {
@@ -52,6 +54,7 @@ describe('Song router', () => {
   let mockDeleteSongUseCase: DeleteSongUseCase;
   let mockGetOneSongUseCase: GetOneSongUseCase;
   let mockFindSongUseCase: FindSongUseCase;
+  let token: string;
 
   beforeAll(() => {
     mockCreateSongUseCase = new MockCreateSongUseCase();
@@ -60,6 +63,13 @@ describe('Song router', () => {
     mockDeleteSongUseCase = new MockDeleteSongUseCase();
     mockGetOneSongUseCase = new MockGetOneSongUseCase();
     mockFindSongUseCase = new MockFindSongUseCase();
+    token = jwt.sign(
+      { email: 'antoine@snowball.gg', role: ROLES.ADMIN },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: 60,
+      }
+    );
     server.use(
       '/song',
       SongRouter(
@@ -81,9 +91,10 @@ describe('Song router', () => {
     test('should return 200 with data', async () => {
       const ExpectedData = [
         {
-          id: '1',
+          _id: '1',
           name: 'Antho',
           artist: {
+            _id: 'UBNYUBY23',
             name: 'okhu',
             cover: 'okjnj',
           },
@@ -194,7 +205,8 @@ describe('Song router', () => {
         .post('/song')
         .field('name', 'Hey')
         .field('artist', '176655')
-        .field('duration', '180');
+        .field('duration', '180')
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(400); //TODO THINGS HERE
     });
 
@@ -208,6 +220,7 @@ describe('Song router', () => {
         .field('name', 'Hey')
         .field('artistId', '176655')
         .field('duration', '180')
+        .set({ Authorization: `Bearer ${token}` })
         .expect((res) => res.status === 500);
     });
   });
@@ -217,8 +230,9 @@ describe('Song router', () => {
       const InputData = {
         name: 'Antho',
         artist: {
+          _id: 'HbUYV56',
           name: 'okikk',
-          cover: 'hyhydsf',
+          cover: 'https://snowball.gg',
         },
         duration: 180,
       };
@@ -228,7 +242,8 @@ describe('Song router', () => {
 
       const response = await request(server)
         .patch('/song/123456789')
-        .send(InputData);
+        .send(InputData)
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(201);
     });
 
@@ -237,7 +252,7 @@ describe('Song router', () => {
         name: 'Antho',
         artist: {
           name: 'okikk',
-          cover: 'hyhydsf',
+          cover: 'https://snowball.gg',
         },
         duration: 180,
       };
@@ -247,7 +262,8 @@ describe('Song router', () => {
 
       const response = await request(server)
         .patch('/song/123456789')
-        .send(InputData);
+        .send(InputData)
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(500);
     });
   });
@@ -258,7 +274,10 @@ describe('Song router', () => {
         .spyOn(mockDeleteSongUseCase, 'execute')
         .mockImplementation(() => Promise.resolve(true));
 
-      const response = await request(server).delete('/song/123456789').send();
+      const response = await request(server)
+        .delete('/song/123456789')
+        .send()
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(201);
     });
 
@@ -267,8 +286,60 @@ describe('Song router', () => {
         .spyOn(mockDeleteSongUseCase, 'execute')
         .mockImplementation(() => Promise.reject(Error()));
 
-      const response = await request(server).delete('/song/123456789').send();
+      const response = await request(server)
+        .delete('/song/123456789')
+        .send()
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(500);
+    });
+  });
+
+  test('PATCH /song returns 201', async () => {
+    const InputData = {
+      name: 'Antho',
+      artist: {
+        _id: 'HbUYV56',
+        name: 'okikk',
+        cover: 'https://snowball.gg',
+      },
+      duration: 180,
+    };
+    jest
+      .spyOn(mockUpdateSongUseCase, 'execute')
+      .mockImplementation(() => Promise.resolve(true));
+
+    const response = await request(server)
+      .patch('/song/123456789')
+      .send(InputData)
+      .set({ Authorization: `Bearer wrong-token` });
+    expect(response.status).toBe(401);
+  });
+
+  describe('ACCESS NOT ADMIN AUTH /song', () => {
+    test('POST /song returns 201', async () => {
+      jest
+        .spyOn(mockCreateSongUseCase, 'execute')
+        .mockImplementation(() => Promise.resolve(true));
+
+      const response = await request(server)
+        .post('/song')
+        .field('name', 'Hey')
+        .field('artist', '176655')
+        .field('duration', '180')
+        .set({ Authorization: `Bearer wrong-token` });
+      expect(response.status).toBe(401); //TODO THINGS HERE
+    });
+
+    test('DELETE /song returns 401', async () => {
+      jest
+        .spyOn(mockDeleteSongUseCase, 'execute')
+        .mockImplementation(() => Promise.resolve(true));
+
+      const response = await request(server)
+        .delete('/song/123456789')
+        .send()
+        .set({ Authorization: `Bearer wrong-token` });
+      expect(response.status).toBe(401);
     });
   });
 });

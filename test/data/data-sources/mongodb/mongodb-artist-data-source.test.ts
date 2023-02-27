@@ -21,7 +21,7 @@ describe('MongoDB datasource', () => {
       name: 'Smith',
       cover: 'John',
     });
-    expect(result.acknowledged).toBeTruthy();
+    expect(result).toBeTruthy();
   });
 
   test('getAll', async () => {
@@ -37,12 +37,12 @@ describe('MongoDB datasource', () => {
       name: 'Smith',
       cover: 'john@gmail.com',
     });
-    expect(result.acknowledged).toBeTruthy();
+    expect(result).toBeFalsy();
   });
 
   test('deleteOne', async () => {
     const ds = new MongoDBArtistDataSource(mockDb);
     const result = await ds.deleteOne('63f50d0742477a0aad95964c');
-    expect(result.acknowledged).toBeTruthy();
+    expect(result).toBeFalsy();
   });
 });

@@ -6,6 +6,15 @@ import s3Helpers from '../../data/data-sources/aws/aws-helpers';
 
 const { storage } = s3Helpers();
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.split('/')[0] === 'audio') {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  },
+});
 
 export default upload;

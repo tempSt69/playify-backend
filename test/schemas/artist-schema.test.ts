@@ -13,7 +13,7 @@ describe('ARTISTS: Zod schemas validator', () => {
     const inputData = {
       body: {
         name: 'Antho',
-        cover: 'Yolo',
+        cover: 'https://snowball.gg',
       },
     };
     const result = createArtistSchema.safeParse(inputData);
@@ -24,7 +24,7 @@ describe('ARTISTS: Zod schemas validator', () => {
     const inputData = {
       body: {
         name: 'Antho',
-        coverr: 'Yolo',
+        cover: 'Yolo',
       },
     };
     const result = createArtistSchema.safeParse(inputData);
@@ -38,7 +38,7 @@ describe('ARTISTS: Zod schemas validator', () => {
       },
       body: {
         name: 'Antho',
-        cover: 'Yolo',
+        cover: 'https://snowball.gg',
       },
     };
     const result = updateArtistSchema.safeParse(inputData);

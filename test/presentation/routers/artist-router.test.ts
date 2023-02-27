@@ -6,6 +6,8 @@ import { GetAllArtistUseCase } from '../../../src/domain/interfaces/use-cases/ar
 import { UpdateArtistUseCase } from '../../../src/domain/interfaces/use-cases/artist/update-artist';
 import ArtistRouter from '../../../src/presentation/routers/artist-router';
 import server from '../../../src/server';
+import jwt from 'jsonwebtoken';
+import { ROLES } from '../../../src/domain/entities/user';
 
 class MockGetAllArtistUseCase implements GetAllArtistUseCase {
   execute(): Promise<Artist[]> {
@@ -36,12 +38,20 @@ describe('Artist router', () => {
   let mockGetAllArtistUseCase: GetAllArtistUseCase;
   let mockUpdateArtistUseCase: UpdateArtistUseCase;
   let mockDeleteArtistUseCase: DeleteArtistUseCase;
+  let token: string;
 
   beforeAll(() => {
     mockCreateArtistUseCase = new MockCreateArtistUseCase();
     mockGetAllArtistUseCase = new MockGetAllArtistUseCase();
     mockUpdateArtistUseCase = new MockUpdateArtistUseCase();
     mockDeleteArtistUseCase = new MockDeleteArtistUseCase();
+    token = jwt.sign(
+      { email: 'antoine@snowball.gg', role: ROLES.ADMIN },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: 60,
+      }
+    );
     server.use(
       '/artist',
       ArtistRouter(
@@ -61,9 +71,9 @@ describe('Artist router', () => {
     test('should return 200 with data', async () => {
       const ExpectedData = [
         {
-          id: '1',
+          _id: '1',
           name: 'Antho',
-          cover: 'Yolo',
+          cover: 'https://snowball.gg',
         },
       ];
       jest
@@ -90,15 +100,18 @@ describe('Artist router', () => {
   describe('POST /artist', () => {
     test('POST /artist returns 201', async () => {
       const InputData = {
-        id: '1',
+        _id: '176T87ds',
         name: 'Antho',
-        cover: 'Yolo',
+        cover: 'https://snowball.gg',
       };
       jest
         .spyOn(mockCreateArtistUseCase, 'execute')
         .mockImplementation(() => Promise.resolve(true));
 
-      const response = await request(server).post('/artist').send(InputData);
+      const response = await request(server)
+        .post('/artist')
+        .send(InputData)
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(201);
     });
 
@@ -106,13 +119,16 @@ describe('Artist router', () => {
       const InputData = {
         id: '1',
         name: 'Antho',
-        cover: 'Yolo',
+        cover: 'https://snowball.gg',
       };
       jest
         .spyOn(mockCreateArtistUseCase, 'execute')
         .mockImplementation(() => Promise.reject(Error()));
 
-      const response = await request(server).post('/artist').send(InputData);
+      const response = await request(server)
+        .post('/artist')
+        .send(InputData)
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(500);
     });
   });
@@ -121,7 +137,7 @@ describe('Artist router', () => {
     test('PATCH /artist returns 201', async () => {
       const InputData = {
         name: 'Antho',
-        cover: 'Yolo',
+        cover: 'https://snowball.gg',
       };
       jest
         .spyOn(mockUpdateArtistUseCase, 'execute')
@@ -129,14 +145,15 @@ describe('Artist router', () => {
 
       const response = await request(server)
         .patch('/artist/123456789')
-        .send(InputData);
+        .send(InputData)
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(201);
     });
 
     test('PATCH /artist returns 500 on use case error', async () => {
       const InputData = {
         name: 'Antho',
-        cover: 'Yolo',
+        cover: 'https://snowball.gg',
       };
       jest
         .spyOn(mockUpdateArtistUseCase, 'execute')
@@ -144,7 +161,8 @@ describe('Artist router', () => {
 
       const response = await request(server)
         .patch('/artist/123456789')
-        .send(InputData);
+        .send(InputData)
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(500);
     });
   });
@@ -155,7 +173,10 @@ describe('Artist router', () => {
         .spyOn(mockDeleteArtistUseCase, 'execute')
         .mockImplementation(() => Promise.resolve(true));
 
-      const response = await request(server).delete('/artist/123456789').send();
+      const response = await request(server)
+        .delete('/artist/123456789')
+        .send()
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(201);
     });
 
@@ -164,8 +185,58 @@ describe('Artist router', () => {
         .spyOn(mockDeleteArtistUseCase, 'execute')
         .mockImplementation(() => Promise.reject(Error()));
 
-      const response = await request(server).delete('/artist/123456789').send();
+      const response = await request(server)
+        .delete('/artist/123456789')
+        .send()
+        .set({ Authorization: `Bearer ${token}` });
       expect(response.status).toBe(500);
+    });
+  });
+
+  describe('ACCESS NOT ADMIN AUTH /artist', () => {
+    test('POST /artist returns 401', async () => {
+      const InputData = {
+        _id: '176T87ds',
+        name: 'Antho',
+        cover: 'https://snowball.gg',
+      };
+      jest
+        .spyOn(mockCreateArtistUseCase, 'execute')
+        .mockImplementation(() => Promise.resolve(true));
+
+      const response = await request(server)
+        .post('/artist')
+        .send(InputData)
+        .set({ Authorization: `Bearer wrong-token` });
+      expect(response.status).toBe(401);
+    });
+
+    test('PATCH /artist returns 401', async () => {
+      const InputData = {
+        name: 'Antho',
+        cover: 'https://snowball.gg',
+      };
+      jest
+        .spyOn(mockUpdateArtistUseCase, 'execute')
+        .mockImplementation(() => Promise.resolve(true));
+
+      const response = await request(server)
+        .patch('/artist/123456789')
+        .send(InputData)
+        .set({ Authorization: `Bearer wrong-token` });
+      expect(response.status).toBe(401);
+    });
+
+    test('DELETE /artist returns 401', async () => {
+      jest
+        .spyOn(mockDeleteArtistUseCase, 'execute')
+        .mockImplementation(() => Promise.resolve(true));
+
+      const response = await request(server)
+        .delete('/artist/123456789')
+        .send()
+        .set({ Authorization: `Bearer wrong-token` });
+      expect(response.status).toBe(401);
     });
   });
 });

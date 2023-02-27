@@ -1,9 +1,9 @@
-import { Artist } from '../../../../src/domain/entities/artist';
-import { ArtistRepository } from '../../../../src/domain/interfaces/repositories/artist-repository';
-import { CreateArtist } from '../../../../src/domain/use-cases/artist/create-artist';
-import { DeleteArtist } from '../../../../src/domain/use-cases/artist/delete-artist';
-import { GetAllArtists } from '../../../../src/domain/use-cases/artist/get-all-artist';
-import { UpdateArtist } from '../../../../src/domain/use-cases/artist/update-artist';
+import { Artist } from '../../../src/domain/entities/artist';
+import { ArtistRepository } from '../../../src/domain/interfaces/repositories/artist-repository';
+import { CreateArtist } from '../../../src/domain/use-cases/artist/create-artist';
+import { DeleteArtist } from '../../../src/domain/use-cases/artist/delete-artist';
+import { GetAllArtists } from '../../../src/domain/use-cases/artist/get-all-artist';
+import { UpdateArtist } from '../../../src/domain/use-cases/artist/update-artist';
 
 describe('Artists use case', () => {
   class MockArtistRepository implements ArtistRepository {

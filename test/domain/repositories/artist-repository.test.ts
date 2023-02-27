@@ -2,6 +2,12 @@ import { ArtistDataSource } from '../../../src/data/interfaces/data-sources/enti
 import { ArtistRepositoryImpl } from '../../../src/domain/repositories/artist-repository';
 
 class MockArtistDataSource implements ArtistDataSource {
+  findOneFilter(filter: object): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  searchIndex?: string | undefined;
+  searchIndexText?: string | undefined;
+  searchField?: string | undefined;
   getAll(): Promise<any[]> {
     throw new Error('Method not implemented.');
   }
